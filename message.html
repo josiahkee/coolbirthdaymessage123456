@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F7FAFE">
+  <title>for xin ying · birthday message</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'><rect x='2' y='9' width='12' height='5' fill='%2354A6F7'/><rect x='2' y='8' width='12' height='2' fill='%23FFFFFF'/><rect x='4' y='5' width='8' height='3' fill='%238CC5FA'/><rect x='4' y='4' width='8' height='1' fill='%23FFFFFF'/><rect x='7' y='1' width='2' height='3' fill='%23E0B24C'/><rect x='1' y='14' width='14' height='1' fill='%232C4C70'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:            #F7FAFE;
+      --surface:       #FFFFFF;
+      --surface-soft:  #F2F7FD;
+
+      --blue:          #54A6F7;
+      --blue-hover:    #3B96F5;
+      --blue-deep:     #2E7FD4;
+      --blue-pale:     #CFE4FB;
+      --blue-shadow:   #BBDDFB;
+
+      --gold:          #E0B24C;
+
+      --green:         #2ECC71;
+      --red:           #E74C3C;
+
+      --ink:           #1C2E42;
+      --muted:         #5A718A;
+      --border:        #2C4C70;
+
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans:  'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --pixel: 'Silkscreen', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; height: 100%; }
+
+    body {
+      min-height: 100%;
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Subtle pixel grid vellum background */
+    .vellum {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background-color: var(--bg);
+      background-image: radial-gradient(var(--blue-pale) 1.2px, transparent 1.2px);
+      background-size: 26px 26px;
+      opacity: .65;
+    }
+
+    #fx {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* 8-bit stepped pixel frame */
+    .px-frame {
+      position: relative;
+      background-color: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow:
+        inset 0 0 0 2px #FFFFFF,
+        inset 0 0 0 4px var(--blue-pale),
+        7px 7px 0 0 var(--blue-shadow);
+    }
+
+    .px-corner {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: var(--blue);
+      border: 1.5px solid var(--border);
+      z-index: 3;
+      pointer-events: none;
+    }
+    .px-corner.tl { top: 5px; left: 5px; }
+    .px-corner.tr { top: 5px; right: 5px; }
+    .px-corner.bl { bottom: 5px; left: 5px; }
+    .px-corner.br { bottom: 5px; right: 5px; }
+
+    /* Top HUD / Navigation Bar */
+    .hud-bar {
+      max-width: 860px;
+      width: 100%;
+      margin: 1.2rem auto 0;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      z-index: 10;
+    }
+
+    .fencing-piste-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .4rem .75rem;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow: 3px 3px 0 0 var(--blue-shadow);
+    }
+
+    .lamp {
+      width: 10px;
+      height: 10px;
+      border: 1.5px solid var(--border);
+      background-color: #E2ECF7;
+      display: inline-block;
+      transition: background-color .2s, box-shadow .2s;
+    }
+    .lamp-red.active {
+      background-color: var(--red);
+      box-shadow: 0 0 8px rgba(231, 76, 60, .6);
+    }
+    .lamp-green.active {
+      background-color: var(--green);
+      box-shadow: 0 0 8px rgba(46, 204, 113, .6);
+    }
+
+    .page-counter-badge {
+      font-family: var(--pixel);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      color: var(--border);
+      font-weight: 700;
+    }
+
+    .hud-actions {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+
+    .icon-btn {
+      padding: .38rem .65rem;
+      font-family: var(--pixel);
+      font-size: .62rem;
+      background: var(--surface);
+      color: var(--border);
+      border: 2px solid var(--border);
+      box-shadow: 3px 3px 0 0 var(--blue-shadow);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      user-select: none;
+      transition: transform .08s, box-shadow .08s;
+    }
+    .icon-btn:hover {
+      background: var(--surface-soft);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 0 var(--blue-shadow);
+    }
+    .icon-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 0 var(--blue-shadow);
+    }
+
+    /* Stepped progress track */
+    .progress-track {
+      max-width: 860px;
+      width: calc(100% - 2rem);
+      margin: .75rem auto 0;
+      height: 8px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow: 2px 2px 0 0 var(--blue-shadow);
+      padding: 1px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      width: 10%;
+      transition: width .35s ease;
+    }
+
+    /* Main Stage */
+    .stage {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 1.1rem auto 1.4rem;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .book-card {
+      padding: clamp(1.8rem, 4.5vw, 3.4rem) clamp(1.4rem, 4.5vw, 3.4rem);
+      min-height: min(560px, 72vh);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: opacity .22s ease, transform .22s ease;
+      position: relative;
+    }
+
+    .book-card.flipping {
+      opacity: 0;
+      transform: translateY(8px) scale(.985);
+    }
+
+    /* Header with ONLY the page number */
+    .page-header-simple {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.6rem;
+    }
+
+    .page-num-pill {
+      font-family: var(--pixel);
+      font-size: .68rem;
+      color: var(--blue-deep);
+      background: var(--surface-soft);
+      border: 1.5px solid var(--blue-pale);
+      padding: .25rem .65rem;
+      letter-spacing: .08em;
+    }
+
+    .fencing-foil-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+    }
+    .fencing-foil-mini svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Large & Dramatic Message Typography */
+    .page-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .lead-huge {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: clamp(2rem, 5.2vw, 3.6rem);
+      line-height: 1.18;
+      color: var(--ink);
+      letter-spacing: -.02em;
+    }
+
+    .text-big {
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: clamp(1.35rem, 3.1vw, 2.15rem);
+      line-height: 1.52;
+      color: #243B53;
+      letter-spacing: -.01em;
+    }
+
+    /* Footer & Controls */
+    .page-foot {
+      margin-top: 1.8rem;
+      padding-top: 1.1rem;
+      border-top: 2px solid var(--blue-pale);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .foot-signoff {
+      font-family: var(--pixel);
+      font-size: .68rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .foot-signoff b {
+      color: var(--blue-deep);
+    }
+
+    .foot-nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      padding: .65rem 1.25rem;
+      font-family: var(--pixel);
+      font-size: .72rem;
+      letter-spacing: .04em;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      background-color: var(--surface);
+      color: var(--ink);
+      box-shadow: 4px 4px 0 0 var(--blue-shadow);
+      transition: transform .08s ease, box-shadow .08s ease, background-color .15s ease;
+      user-select: none;
+    }
+    .btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 5px 5px 0 0 var(--blue-shadow);
+    }
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 0 var(--blue-shadow);
+    }
+
+    .btn-primary {
+      background-color: var(--blue);
+      color: #FFFFFF;
+      box-shadow:
+        inset 0 2px 0 0 #8EC9FC,
+        4px 4px 0 0 var(--border);
+    }
+    .btn-primary:hover {
+      background-color: var(--blue-hover);
+      box-shadow:
+        inset 0 2px 0 0 #8EC9FC,
+        5px 5px 0 0 var(--border);
+    }
+    .btn-primary:active {
+      box-shadow: 1px 1px 0 0 var(--border);
+    }
+
+    .btn-ghost {
+      background-color: var(--surface);
+      color: var(--ink);
+    }
+    .btn-ghost:disabled {
+      opacity: .4;
+      pointer-events: none;
+      box-shadow: none;
+    }
+
+    /* Page quick dots */
+    .page-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      margin: .6rem auto 1.4rem;
+    }
+    .page-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      box-shadow: 1.5px 1.5px 0 0 var(--blue-shadow);
+      cursor: pointer;
+      padding: 0;
+      transition: background-color .2s, transform .1s;
+    }
+    .page-dot.active {
+      background: var(--blue);
+      box-shadow: 1.5px 1.5px 0 0 var(--border);
+      transform: scale(1.2);
+    }
+
+    /* Bottom footer link */
+    .global-foot {
+      text-align: center;
+      padding: 0 1rem 1.6rem;
+      font-family: var(--pixel);
+      font-size: .62rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .global-foot a {
+      color: var(--blue-deep);
+      text-decoration: none;
+      padding: .25rem .5rem;
+      background: var(--surface);
+      border: 1.5px solid var(--blue-pale);
+    }
+    .global-foot a:hover {
+      border-color: var(--border);
+      background: var(--surface-soft);
+    }
+
+    @media (max-width: 560px) {
+      .book-card {
+        padding: 1.5rem 1.2rem;
+        min-height: 520px;
+      }
+      .page-foot {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+      .foot-nav-buttons {
+        width: 100%;
+      }
+      .foot-nav-buttons .btn {
+        flex: 1;
+      }
+      .foot-signoff {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="vellum" aria-hidden="true"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <!-- Top HUD Bar -->
+  <header class="hud-bar">
+    <div class="fencing-piste-indicator">
+      <span class="lamp lamp-red" id="lampRed"></span>
+      <span class="page-counter-badge" id="pageBadge">PAGE 01 / 10</span>
+      <span class="lamp lamp-green active" id="lampGreen"></span>
+    </div>
+
+    <div class="hud-actions">
+      <button type="button" class="icon-btn" id="sfxToggle" title="Toggle sound effects">SFX: ON</button>
+      <button type="button" class="icon-btn" id="burstBtn" title="Launch confetti">Confetti!</button>
+    </div>
+  </header>
+
+  <!-- Stepped Progress Fill -->
+  <div class="progress-track" aria-hidden="true">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- Stage / Card Presentation -->
+  <main class="stage">
+    <article class="book-card px-frame" id="bookCard">
+      <span class="px-corner tl"></span><span class="px-corner tr"></span>
+      <span class="px-corner bl"></span><span class="px-corner br"></span>
+
+      <!-- Content dynamically rendered -->
+      <div id="cardInner"></div>
+
+      <!-- Controls -->
+      <footer class="page-foot">
+        <div class="foot-signoff">
+          <span>from ur hb,</span>
+          <b>josiah</b>
+        </div>
+        <div class="foot-nav-buttons">
+          <button type="button" class="btn btn-ghost" id="prevBtn">&lt; Prev</button>
+          <button type="button" class="btn btn-primary" id="nextBtn">Next &gt;</button>
+        </div>
+      </footer>
+    </article>
+
+    <!-- Page Quick Dots -->
+    <nav class="page-dots" id="dotsContainer" aria-label="Page navigation"></nav>
+  </main>
+
+  <footer class="global-foot">
+    <span>use &larr; &rarr; arrow keys or swipe to turn pages</span>
+  </footer>
+
+  <script>
+    /* ===================================================================
+     *  JOSIAH'S EXACT WORDS ONLY (Split into 10 large, readable pages)
+     * =================================================================== */
+    const PAGES = [
+      {
+        render: () => `
+          <div class="page-body">
+            <h1 class="lead-huge" style="color: var(--blue-deep);">HII XIN YINGG</h1>
+            <h2 class="lead-huge" style="color: var(--ink);">HAPPY BDAYYYY</h2>
+            <p class="text-big" style="color: var(--ink); margin-top: .6rem;">
+              i cant believe its the 3rd birthday uve had since i knew you, happy 17th!!
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              ngl i feel that so much has happened between us in the past 2 years and i feel like without knowing you my life might have been q different :))
+            </p>
+            <p class="text-big">
+              it doesn't feel that long since last year (lwk i forget what i gave u already) but i feel like our friendship has changed sm and now ik that this friendship gonna be in my life for a longg time
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              its crazy how we got close and honestly i dont know how we got close but ive alw felt vv comf being myself around u that i dont rly feel much other ppl and im rly happy to have a friend that i can easily hang out w without being drained and knowing that they care for me too
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big" style="color: var(--blue-deep); font-weight: 700;">
+              i think you still owe me one for swapping seats with u in Y3S1 Physics CT1 btw
+            </p>
+            <p class="text-big">
+              but this year alone ill never forget all our cool stuff too like ur sandwiches or music or js how we got even closer in general
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              honestly if you asked me last year if id be this close to you id absolutely not believe it but i think its amazing that we did infact get closer and i think it also shows that our friendship is not fake but actl smth real
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              im also rly inspired by the level of dedication u alw put into ur fencing/sports and its alw really inspiring and interesting to watch and see u progress, and at the same time being easily one of the most thoughtful person i know!!
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              i rly wish you all the best in the future for all the goals that ur chasing and i wanna see u on tv one day ykyk!!
+            </p>
+            <p class="text-big" style="color: var(--blue-deep); font-weight: 700;">
+              jiayoussss and u can alw turn to me if u need anyt!!
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              honestly ive wrote so much words for u (youll understand tmr) that i dont know what to write anymore, but on a personal level i wanna thank you for being someone i can completely rely onnn, whether i needed advice or someone to vent too yeaaaa
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              as you spend ur last year being a child i hope this year repays all the hard work youve been quietly putting in, and may it bring you closer to all your biggest goals, open up new opportunities (ykyk) and give you the recognition and success u deserve!!
+            </p>
+          </div>
+        `
+      },
+      {
+        render: () => `
+          <div class="page-body">
+            <p class="text-big">
+              I cant wait to see everything you achieve and stand in ur corner when u do!!!
+            </p>
+            <p class="lead-huge" style="color: var(--blue-deep); margin-top: .4rem;">
+              have the absolute best birthday ahead!!!!
+            </p>
+          </div>
+        `
+      }
+    ];
+
+    /* ===================================================================
+     *  SYNTHESIZED WEB AUDIO (Foil Clash & Swoosh)
+     * =================================================================== */
+    let sfxEnabled = true;
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, dur, { type = 'triangle', gain = 0.12, delay = 0 } = {}) {
+      if (!sfxEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const t = ctx.currentTime + delay;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(gain, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start(t);
+      o.stop(t + dur + 0.04);
+    }
+
+    function playSwoosh() {
+      if (!sfxEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(260, t);
+      o.frequency.exponentialRampToValueAtTime(680, t + 0.12);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.08, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start(t);
+      o.stop(t + 0.14);
+    }
+
+    function playClash() {
+      if (!sfxEnabled) return;
+      playTone(1800, 0.08, { type: 'square', gain: 0.05 });
+      playTone(3200, 0.14, { type: 'sine', gain: 0.09, delay: 0.01 });
+      playTone(740, 0.22, { type: 'triangle', gain: 0.08, delay: 0.02 });
+    }
+
+    function playFanfare() {
+      if (!sfxEnabled) return;
+      [[523.25, 0, .14], [659.25, .11, .14], [783.99, .22, .14], [1046.5, .34, .5]].forEach(([f, d, l]) => {
+        playTone(f, l, { gain: 0.12, delay: d });
+      });
+    }
+
+    /* ===================================================================
+     *  CONFETTI & PARTICLES
+     * =================================================================== */
+    const FX = {
+      cv: null, g: null, parts: [], on: false,
+      colors: ['#54A6F7', '#8CC5FA', '#2E7FD4', '#E0B24C', '#FAF0D4', '#FFFFFF'],
+      init() {
+        this.cv = document.getElementById('fx');
+        this.g = this.cv.getContext('2d');
+        const resize = () => {
+          const dpr = Math.min(2, window.devicePixelRatio || 1);
+          this.cv.width = window.innerWidth * dpr;
+          this.cv.height = window.innerHeight * dpr;
+          this.g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        };
+        resize();
+        window.addEventListener('resize', resize);
+      },
+      burst(x, y, count = 70) {
+        for (let i = 0; i < count; i++) {
+          const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.8;
+          const sp = 8 * (0.4 + Math.random() * 0.9);
+          this.parts.push({
+            x, y,
+            vx: Math.cos(a) * sp,
+            vy: Math.sin(a) * sp,
+            rot: Math.random() * 6,
+            vr: (Math.random() - 0.5) * 0.25,
+            size: 6 + Math.floor(Math.random() * 4) * 2,
+            color: this.colors[i % this.colors.length],
+            life: 0,
+            max: 130 + Math.random() * 70,
+            grav: 0.18,
+            drag: 0.985
+          });
+        }
+        if (!this.on) {
+          this.on = true;
+          requestAnimationFrame(() => this.step());
+        }
+      },
+      cannons() {
+        this.burst(window.innerWidth * 0.15, window.innerHeight * 0.85, 75);
+        this.burst(window.innerWidth * 0.85, window.innerHeight * 0.85, 75);
+        setTimeout(() => this.burst(window.innerWidth * 0.5, window.innerHeight * 0.35, 90), 300);
+      },
+      step() {
+        const g = this.g;
+        g.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        this.parts = this.parts.filter(p => p.life < p.max && p.y < window.innerHeight + 40);
+        for (const p of this.parts) {
+          p.life++;
+          p.vx = p.vx * p.drag + Math.sin(p.life * 0.12 + p.rot) * 0.08;
+          p.vy = p.vy * p.drag + p.grav;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          g.globalAlpha = 1 - Math.max(0, (p.life - p.max * 0.7) / (p.max * 0.3));
+          g.fillStyle = p.color;
+          g.save();
+          g.translate(p.x, p.y);
+          g.rotate(p.rot);
+          g.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.65);
+          g.restore();
+        }
+        g.globalAlpha = 1;
+        if (this.parts.length) {
+          requestAnimationFrame(() => this.step());
+        } else {
+          this.on = false;
+          g.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        }
+      }
+    };
+
+    /* ===================================================================
+     *  BOOK READER CONTROLLER
+     * =================================================================== */
+    let curPage = 0;
+    const totalPages = PAGES.length;
+
+    const bookCard = document.getElementById('bookCard');
+    const cardInner = document.getElementById('cardInner');
+    const pageBadge = document.getElementById('pageBadge');
+    const progressFill = document.getElementById('progressFill');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dotsContainer');
+    const lampRed = document.getElementById('lampRed');
+    const lampGreen = document.getElementById('lampGreen');
+    const sfxToggle = document.getElementById('sfxToggle');
+    const burstBtn = document.getElementById('burstBtn');
+
+    function buildDots() {
+      dotsContainer.replaceChildren();
+      for (let i = 0; i < totalPages; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'page-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to page ${i + 1}`);
+        dot.addEventListener('click', () => goToPage(i));
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function renderPage(idx) {
+      const page = PAGES[idx];
+      cardInner.innerHTML = `
+        <div class="page-header-simple">
+          <span class="page-num-pill">PAGE ${String(idx + 1).padStart(2, '0')} / ${String(totalPages).padStart(2, '0')}</span>
+          <span class="fencing-foil-mini" aria-hidden="true">
+            <svg viewBox="0 0 24 24" shape-rendering="crispEdges">
+              <rect x="2" y="21" width="3" height="2" fill="#2C4C70"/>
+              <rect x="5" y="18" width="3" height="3" fill="#E0B24C"/>
+              <rect x="8" y="15" width="2" height="3" fill="#2C4C70"/>
+              <rect x="10" y="8" width="2" height="8" fill="#54A6F7"/>
+              <rect x="12" y="2" width="2" height="7" fill="#54A6F7"/>
+            </svg>
+          </span>
+        </div>
+        ${page.render()}
+      `;
+
+      pageBadge.textContent = `PAGE ${String(idx + 1).padStart(2, '0')} / ${String(totalPages).padStart(2, '0')}`;
+      progressFill.style.width = `${((idx + 1) / totalPages) * 100}%`;
+
+      prevBtn.disabled = (idx === 0);
+      nextBtn.textContent = (idx === totalPages - 1) ? 'Celebrate!! 🎉' : 'Next >';
+
+      // Scoreboard lights
+      if (idx % 2 === 0) {
+        lampGreen.classList.add('active');
+        lampRed.classList.remove('active');
+      } else {
+        lampRed.classList.add('active');
+        lampGreen.classList.remove('active');
+      }
+
+      // Update dots
+      Array.from(dotsContainer.children).forEach((dot, dIdx) => {
+        dot.classList.toggle('active', dIdx === idx);
+      });
+    }
+
+    function goToPage(idx) {
+      if (idx < 0 || idx >= totalPages || idx === curPage) return;
+      playSwoosh();
+      bookCard.classList.add('flipping');
+      setTimeout(() => {
+        curPage = idx;
+        renderPage(curPage);
+        bookCard.classList.remove('flipping');
+        if (curPage === totalPages - 1) {
+          playClash();
+          playFanfare();
+          FX.cannons();
+        }
+      }, 140);
+    }
+
+    function nextPage() {
+      if (curPage < totalPages - 1) {
+        goToPage(curPage + 1);
+      } else {
+        // Final page celebrate trigger
+        playClash();
+        playFanfare();
+        FX.cannons();
+      }
+    }
+
+    function prevPage() {
+      if (curPage > 0) {
+        goToPage(curPage - 1);
+      }
+    }
+
+    // Controls
+    nextBtn.addEventListener('click', nextPage);
+    prevBtn.addEventListener('click', prevPage);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+        if (document.activeElement?.tagName !== 'BUTTON') {
+          e.preventDefault();
+          nextPage();
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (document.activeElement?.tagName !== 'BUTTON') {
+          e.preventDefault();
+          prevPage();
+        }
+      }
+    });
+
+    // Mobile touch swipe gestures
+    let touchStartX = 0;
+    let touchStartY = 0;
+    bookCard.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    bookCard.addEventListener('touchend', e => {
+      const diffX = e.changedTouches[0].screenX - touchStartX;
+      const diffY = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(diffX) > 48 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) nextPage();
+        else prevPage();
+      }
+    }, { passive: true });
+
+    // SFX toggle
+    sfxToggle.addEventListener('click', () => {
+      sfxEnabled = !sfxEnabled;
+      sfxToggle.textContent = sfxEnabled ? 'SFX: ON' : 'SFX: OFF';
+      if (sfxEnabled) playTone(780, 0.08);
+    });
+
+    // Confetti button
+    burstBtn.addEventListener('click', () => {
+      playClash();
+      FX.cannons();
+    });
+
+    // Boot
+    FX.init();
+    buildDots();
+    renderPage(0);
+  </script>
+</body>
+</html>
